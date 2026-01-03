@@ -1,4 +1,7 @@
+-- Wait until Workspace is available
+local Workspace = game:GetService("Workspace")
 
+-- Now run your metatable hook
 local mt = getrawmetatable(game)
 local old_index = mt.__index
 local old_namecall = mt.__namecall
@@ -11,5 +14,3 @@ mt.__namecall = function(self, ...)
     return old_namecall(self, ...)
 end
 setreadonly(mt, true)
-
-
