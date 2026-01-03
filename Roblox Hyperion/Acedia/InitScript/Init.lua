@@ -1,6 +1,6 @@
 -- Wait until Workspace is available
 spawn(function()
-local Workspace = game:GetService("Workspace")
+repeat wait() until game:GetService("Workspace")
 
 
 
@@ -28,3 +28,4 @@ end
 
 setreadonly(mt, true)
     end)
+
