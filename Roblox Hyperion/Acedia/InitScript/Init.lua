@@ -12,20 +12,26 @@ local old_namecall = mt.__namecall
 setreadonly(mt, false)
 
 mt.__index = function(self, key)
-    if key == "HttpGet" then
+    if key == "HttpGet" or key == "HttpGetAsync" then
         return getgenv().HttpGet
+    elseif key == "GetObjects" then
+        return getgenv().GetObjects
     end
     return old_index(self, key)
 end
 
 mt.__namecall = function(self, ...)
     local method = getnamecallmethod()
-    if method == "HttpGet" then
+
+    if method == "HttpGet" or method == "HttpGetAsync" then
         return getgenv().HttpGet(...)
+    elseif method == "GetObjects" then
+        return getgenv().GetObjects(...)
     end
     return old_namecall(self, ...)
 end
 
 setreadonly(mt, true)
     end)
+
 
