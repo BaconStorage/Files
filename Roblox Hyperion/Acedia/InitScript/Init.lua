@@ -1,8 +1,9 @@
 -- Wait until Workspace is available
 
 spawn(function()
-repeat wait() until game:GetService("Workspace")
-
+    repeat
+        task.wait()  -- Prefer task.wait() over wait() in modern Luau
+    until game:IsLoaded() or game:GetService("Workspace")
 
 
 
@@ -34,6 +35,7 @@ end)
 
 setreadonly(mt, true)
     end)
+
 
 
 
