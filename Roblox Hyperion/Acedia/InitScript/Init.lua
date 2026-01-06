@@ -1,5 +1,5 @@
 -- Wait until Workspace is available
-hookfunction(game.shutdown,function() end)
+
 spawn(function()
 repeat wait() until game:GetService("Workspace")
 
@@ -34,6 +34,7 @@ end)
 
 setreadonly(mt, true)
     end)
+
 
 
 
