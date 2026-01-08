@@ -55,15 +55,4 @@ spawn(function()
         end
     end
 
-    -- Also override direct index access: game.HttpGet (non-colon syntax)
-    -- This works because most executors allow it after unlocking
-    if hookfunction then
-        hookfunction(game.HttpGet, hookHttpGet)
-        hookfunction(game.HttpGetAsync, hookHttpGet)
-        hookfunction(game.GetObjects, hookGetObjects)
-
-    end
-
-
     end)
-
