@@ -20,7 +20,7 @@ spawn(function()
     end
 
     -- Get the metatable of game
-    local mt = getrawmetatable(game)
+    local mt = getrawmetatable(getgenv().game)
     if not mt then
         warn("Could not get metatable of game")
         return
@@ -66,3 +66,4 @@ spawn(function()
 
 
     end)
+
