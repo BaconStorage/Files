@@ -3,9 +3,9 @@ spawn(function()
     repeat task.wait() until game:IsLoaded()
 
     -- Wait for Players service to exist
-    repeat task.wait() until game:FindFirstChild("Players")
-    repeat task.wait() until game:FindFirstChild("Workspace")
-    repeat task.wait() until game:GetService("Players").LocalPlayer
+    repeat task.wait() until game:FindFirstChild("Players") ~= nil
+    repeat task.wait() until game:FindFirstChild("Workspace") ~= nil
+    repeat task.wait() until game:GetService("Players").LocalPlayer ~= nil
     repeat task.wait() until game:GetService("Players").LocalPlayer.UserId >= 0
     local startTime = tick()
 
@@ -57,6 +57,7 @@ end)
 
 setreadonly(mt, true)
     end)
+
 
 
 
