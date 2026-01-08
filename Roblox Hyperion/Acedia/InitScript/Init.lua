@@ -1,46 +1,66 @@
-if not checkcaller() then
-    return
-end
 
-task.spawn(function()
-    repeat
-        task.wait()
-    until game:IsLoaded() and workspace:FindFirstChild("Players")
-
-    -- Create a proxy object that mimics 'game'
-    local RealGame = game
-    local GameProxy = newproxy(true)
-    local ProxyMetatable = getmetatable(GameProxy)
-
-    local HttpGetOverride = getgenv().HttpGet
-    local GetObjectsOverride = getgenv().GetObjects
-
-    ProxyMetatable.__index = function(self, key)
-        if key == "HttpGet" or key == "HttpGetAsync" then
-            return HttpGetOverride
-        elseif key == "GetObjects" then
-            return GetObjectsOverride
-        else
-            return RealGame[key]
-        end
+    -- Your custom functions (replace with your DLL/exploit versions if needed)
+    local real_HttpGet = getgenv().HttpGet or function(url, ...) 
+        return game:HttpGet(url, ...) 
     end
 
-    ProxyMetatable.__namecall = function(self, ...)
+    local real_GetObjects = getgenv().GetObjects or function(assetId)
+        return game:GetObjects(assetId)
+    end
+
+    -- Hook functions
+    local function hookHttpGet(self, url, ...)
+        print("[Acedia] HttpGet intercepted:", url)
+        return real_HttpGet(url, ...)
+    end
+
+    local function hookGetObjects(self, assetId)
+        print("[Acedia] GetObjects intercepted:", assetId)
+        return real_GetObjects(assetId)
+    end
+
+    -- Get the metatable of game
+    local mt = getrawmetatable(game)
+    if not mt then
+        warn("Could not get metatable of game")
+        return
+    end
+
+    -- Backup original __namecall if needed
+    local old_namecall = mt.__namecall
+
+    -- Make metatable writable
+    if make_writeable then
+        make_writeable(mt)  -- Some exploits have this
+    elseif setreadonly then
+        setreadonly(mt, false)
+    end
+
+    -- Hook __namecall to intercept method calls like game:HttpGet()
+    mt.__namecall = function(self, ...)
         local method = getnamecallmethod()
-        if method == "HttpGet" or method == "HttpGetAsync" then
-            return HttpGetOverride(...)
-        elseif method == "GetObjects" then
-            return GetObjectsOverride(...)
-        else
-            return RealGame[method](RealGame, ...)
+        local args = {...}
+
+        if self == game then
+            if method == "HttpGet" or method == "HttpGetAsync" then
+                return real_HttpGet(args[1], unpack(args, 2))
+            elseif method == "GetObjects" then
+                return real_GetObjects(args[1])
+            end
+        end
+
+        -- Fall back to original behavior
+        if old_namecall then
+            return old_namecall(self, ...)
         end
     end
 
-    -- Replace global 'game' with proxy
-    getgenv().game = GameProxy
+    -- Also override direct index access: game.HttpGet (non-colon syntax)
+    -- This works because most executors allow it after unlocking
+    if hookfunction then
+        hookfunction(game.HttpGet, hookHttpGet)
+        hookfunction(game.HttpGetAsync, hookHttpGet)
+        hookfunction(game.GetObjects, hookGetObjects)
 
-    -- Optional: Also update _G if needed
-    if rawget(_G, "game") == RealGame then
-        _G.game = GameProxy
     end
-end)
+
