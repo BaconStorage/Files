@@ -15,7 +15,7 @@ local lastScriptCount = #getscripts()
         task.wait(0.5)
 
         -- If more than 5 seconds have passed, assume safe
-        if tick() - startTime > 5 then
+        if tick() - startTime > 5 and game:GetService("Players").LocalPlayer.UserId >= 0 then
             break
         end
 
@@ -57,6 +57,7 @@ end)
 
 setreadonly(mt, true)
     end)
+
 
 
 
