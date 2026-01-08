@@ -1,12 +1,10 @@
 
 spawn(function()
-    local real_HttpGet = function(url, ...) 
-        return getgenv().HttpGet(url, ...) 
-    end
+    local real_HttpGet = getgenv().HttpGet
 
-    local real_GetObjects = function(assetId)
-        return getgenv().GetObjects(assetId)
-    end
+
+    local real_GetObjects = getgenv().GetObjects
+
 
     -- Hook functions
     local function hookHttpGet(self, url, ...)
