@@ -28,7 +28,6 @@ local lastScriptCount = #getscripts()
 
     until false
 
-print("loaded")
 local mt = getrawmetatable(getgenv().game)
 local old_index = mt.__index
 local old_namecall = mt.__namecall
@@ -57,6 +56,7 @@ end)
 
 setreadonly(mt, true)
     end)
+
 
 
 
