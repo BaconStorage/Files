@@ -5,7 +5,8 @@ spawn(function()
     -- Wait for Players service to exist
     repeat task.wait() until game:FindFirstChild("Players")
     repeat task.wait() until game:FindFirstChild("Workspace")
-    repeat task.wait() until game:FindFirstChild("Players").LocalPlayer and game:FindFirstChild("Players").LocalPlayer.UserId >= 0
+    repeat task.wait() until game:FindFirstChild("Players").LocalPlayer
+    repeat task.wait() until game:FindFirstChild("Players").LocalPlayer.UserId >= 0
     local startTime = tick()
 
 local lastScriptCount = #getscripts()
@@ -56,6 +57,7 @@ end)
 
 setreadonly(mt, true)
     end)
+
 
 
 
