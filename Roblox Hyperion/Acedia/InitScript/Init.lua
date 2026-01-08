@@ -10,7 +10,7 @@ spawn(function()
 local lastScriptCount = #getscripts()
 
     repeat
-        task.wait(0.5)
+        task.wait(0.1)
 
         -- If more than 5 seconds have passed, assume safe
         if tick() - startTime > 5 then
@@ -55,6 +55,7 @@ end)
 
 setreadonly(mt, true)
     end)
+
 
 
 
