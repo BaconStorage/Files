@@ -54,5 +54,8 @@ spawn(function()
     end
 
     end))
+if setreadonly then
+        setreadonly(mt, true)
+    end
 
 
