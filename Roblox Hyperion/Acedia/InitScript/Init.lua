@@ -1,50 +1,46 @@
--- Wait until Workspace is available AND game is fully loaded
-spawn(function()
+if not checkcaller() then
+    return
+end
+
+task.spawn(function()
     repeat
         task.wait()
-    until game:IsLoaded() and game:GetService("Workspace")
+    until game:IsLoaded() and workspace:FindFirstChild("Players")
 
-    -- Only proceed if we're in an executor environment
-    if not checkcaller() then
-        return  -- Skip if running in normal Roblox context
-    end
+    -- Create a proxy object that mimics 'game'
+    local RealGame = game
+    local GameProxy = newproxy(true)
+    local ProxyMetatable = getmetatable(GameProxy)
 
-    local mt = getrawmetatable(game)
-    if not mt then
-        return  -- Fallback if metatable is inaccessible
-    end
+    local HttpGetOverride = getgenv().HttpGet
+    local GetObjectsOverride = getgenv().GetObjects
 
-    local old_index = mt.__index
-    local old_namecall = mt.__namecall
-
-    setreadonly(mt, false)
-
-    mt.__index = newcclosure(function(self, key)
+    ProxyMetatable.__index = function(self, key)
         if key == "HttpGet" or key == "HttpGetAsync" then
-                    if not checkcaller() then
-            return getgenv().HttpGet
-                    end
+            return HttpGetOverride
         elseif key == "GetObjects" then
-                    if not checkcaller() then
-            return getgenv().GetObjects
-                    end
+            return GetObjectsOverride
+        else
+            return RealGame[key]
         end
-        return old_index(self, key)
-    end)
+    end
 
-    mt.__namecall = newcclosure(function(self, ...)
+    ProxyMetatable.__namecall = function(self, ...)
         local method = getnamecallmethod()
         if method == "HttpGet" or method == "HttpGetAsync" then
-                    if not checkcaller() then
-            return getgenv().HttpGet(...)
-                    end
+            return HttpGetOverride(...)
         elseif method == "GetObjects" then
-                    if not checkcaller() then
-            return getgenv().GetObjects(...)
-                    end
+            return GetObjectsOverride(...)
+        else
+            return RealGame[method](RealGame, ...)
         end
-        return old_namecall(self, ...)
-    end)
+    end
 
-    setreadonly(mt, true)
+    -- Replace global 'game' with proxy
+    getgenv().game = GameProxy
+
+    -- Optional: Also update _G if needed
+    if rawget(_G, "game") == RealGame then
+        _G.game = GameProxy
+    end
 end)
