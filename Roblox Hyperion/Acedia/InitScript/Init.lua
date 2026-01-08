@@ -35,7 +35,7 @@ spawn(function()
     end
 
     -- Hook __namecall to intercept method calls like game:HttpGet()
-    mt.__namecall = function(self, ...)
+    mt.__namecall = newcclosure(function(self, ...)
         local method = getnamecallmethod()
         local args = {...}
 
@@ -53,5 +53,6 @@ spawn(function()
         end
     end
 
-    end)
+    end))
+
 
