@@ -1,11 +1,11 @@
 
 spawn(function()
-    local real_HttpGet = getgenv().HttpGet or function(url, ...) 
-        return game:HttpGet(url, ...) 
+    local real_HttpGet = function(url, ...) 
+        return getgenv().HttpGet(url, ...) 
     end
 
-    local real_GetObjects = getgenv().GetObjects or function(assetId)
-        return game:GetObjects(assetId)
+    local real_GetObjects = function(assetId)
+        return getgenv().GetObjects(assetId)
     end
 
     -- Hook functions
@@ -56,3 +56,4 @@ spawn(function()
     end
 
     end)
+
