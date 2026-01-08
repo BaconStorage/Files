@@ -4,6 +4,7 @@ spawn(function()
 
     -- Wait for Players service to exist
     repeat task.wait() until game:FindFirstChild("Players")
+    repeat task.wait() until game:FindFirstChild("Workspace")
 
     local startTime = tick()
 
@@ -55,6 +56,7 @@ end)
 
 setreadonly(mt, true)
     end)
+
 
 
 
