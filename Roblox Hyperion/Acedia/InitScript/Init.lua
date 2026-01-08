@@ -1,5 +1,5 @@
 
-    -- Your custom functions (replace with your DLL/exploit versions if needed)
+spawn(function()
     local real_HttpGet = getgenv().HttpGet or function(url, ...) 
         return game:HttpGet(url, ...) 
     end
@@ -64,3 +64,5 @@
 
     end
 
+
+    end)
