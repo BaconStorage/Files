@@ -1,19 +1,13 @@
--- Wait until Workspace is available
 
 spawn(function()
     repeat task.wait() until game:IsLoaded()
 
     -- Wait for Players service to exist
-    repeat task.wait() until workspace:FindFirstChild("Players")
-
-    -- 🔒 Anti-Cheat Signal/Check System
-    -- Wait for anti-cheat to finish initial scans by monitoring:
-    -- 1. No more rapid script loads in first few seconds
-    -- 2. Player count stabilizes (usually 1-2 seconds after join)
-    -- 3. No anti-cheat-related services being created rapidly
+    repeat task.wait() until game:FindFirstChild("Players")
 
     local startTime = tick()
-    local lastScriptCount = #getscripts()
+
+local lastScriptCount = #getscripts()
 
     repeat
         task.wait(0.5)
@@ -32,7 +26,7 @@ spawn(function()
 
     until false
 
-
+print("loaded")
 local mt = getrawmetatable(getgenv().game)
 local old_index = mt.__index
 local old_namecall = mt.__namecall
@@ -61,6 +55,7 @@ end)
 
 setreadonly(mt, true)
     end)
+
 
 
 
